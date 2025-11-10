@@ -4,4 +4,4 @@ DIR:Videos
 DIR:Bogdan
   DIR:Stuff
     DIR:poze
-      FIS:eu.png,20.0
+      FIS:eu.mp3,20.0
