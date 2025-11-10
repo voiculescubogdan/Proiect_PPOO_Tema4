@@ -20,16 +20,14 @@ public class ManagerMultimedia {
     }
 
     public void incarcaSistem() {
-        System.out.println("Se incarca sistemul de fisiere...");
+        System.out.println("Se incarca sistemul de fisiere..." + fisiereSalvare);
 
         Stack<Director> stivaParinti = new Stack<>();
-
         stivaParinti.push(radacina);
 
         try(BufferedReader br = new BufferedReader(new FileReader(fisiereSalvare))) {
 
             String linie;
-
             while((linie = br.readLine()) != null) {
                 int nivelIndentare = calculeazaNivelIndentare(linie);
                 String continut = linie.trim();
@@ -61,9 +59,6 @@ public class ManagerMultimedia {
                     }
                 }
             }
-
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             System.out.println("Fisierul de salvare" + fisiereSalvare + "nu a fost gasit");
         } catch (Exception e) {

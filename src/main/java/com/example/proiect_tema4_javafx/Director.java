@@ -45,7 +45,7 @@ public class Director extends ElementSistem{
         this.copii.add(element);
     }
 
-    public void stergeElemenet(ElementSistem element) {
+    public void stergeElement(ElementSistem element) {
         this.copii.remove(element);
         element.setParinte(null);
     }

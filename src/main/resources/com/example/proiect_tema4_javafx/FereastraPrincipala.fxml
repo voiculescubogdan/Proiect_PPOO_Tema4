@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.proiect_tema4_javafx.FereastraPrincipalaController">
+   <children>
+      <TreeView fx:id="treeView" layoutX="10.0" layoutY="27.0" prefHeight="200.0" prefWidth="221.0" />
+      <TextField fx:id="textFieldNume" layoutX="82.0" layoutY="242.0" />
+      <TextField fx:id="textFieldDimensiune" layoutX="82.0" layoutY="281.0" />
+      <Button fx:id="butonAdaugaDirector" layoutX="256.0" layoutY="26.0" mnemonicParsing="false" onAction="#handleAdaugaDirector" text="Adauga Director" />
+      <Button fx:id="butonAdaugaFisier" layoutX="256.0" layoutY="69.0" mnemonicParsing="false" onAction="#handleAdaugaFisier" text="Adauga Fisier" />
+      <Button fx:id="butonSterge" layoutX="256.0" layoutY="114.0" mnemonicParsing="false" onAction="#handleSterge" text="Sterge element" />
+      <Label fx:id="labelCale" layoutX="385.0" layoutY="30.0" text="Cale" />
+      <Label fx:id="labelDimensiune" layoutX="385.0" layoutY="73.0" text="Dimensiune" />
+      <Label layoutX="14.0" layoutY="246.0" text="Nume" />
+      <Label layoutX="14.0" layoutY="285.0" text="Dimensiune" />
+   </children>
+</AnchorPane>
