@@ -3,6 +3,8 @@ package com.example.proiect_tema4_javafx;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
+import java.util.Optional;
+
 public class FereastraPrincipalaController {
 
     @FXML
@@ -22,6 +24,9 @@ public class FereastraPrincipalaController {
 
     @FXML
     private Button butonSterge;
+
+    @FXML
+    private Button butonMuta;
 
     @FXML
     private Label labelCale;
@@ -181,6 +186,102 @@ public class FereastraPrincipalaController {
             alert.setContentText(e.getMessage());
             alert.showAndWait();
         }
+    }
+
+    @FXML
+    private void handleMuta() {
+        try {
+            if(elementSelectat == null) {
+                throw new Exception("Nu ai selectat niciun element de mutat!");
+            }
+
+            if(elementSelectat.getParinte() == null) {
+                throw new Exception("Nu poti muta directorul radacina!");
+            }
+
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Mutare Element");
+            dialog.setHeaderText("Mutare: " + elementSelectat.getNume());
+            dialog.setContentText("Introduceti calea directorului destinatie: ");
+
+            Optional<String> rezultat = dialog.showAndWait();
+
+            if(!rezultat.isPresent() || rezultat.get().trim().isEmpty()) {
+                throw new Exception("Operatie de mutare anulata sau calea este goala!");
+            }
+
+            String caleDestinatie = rezultat.get().trim();
+
+            ElementSistem destinatie = gasesteElementDupaCale(caleDestinatie);
+
+            if(destinatie == null) {
+                throw new Exception("Calea destinatie: " + caleDestinatie + " nu a fost gasita!");
+            }
+
+            if(!(destinatie instanceof Director)) {
+                throw new Exception("Destinatia trebuie sa fie un Director");
+            }
+
+            if(destinatie.getCale().startsWith(elementSelectat.getCale())) {
+                throw new Exception("Nu poti muta un director in interiorul lui insusi!");
+            }
+
+            Director parinteVechi = elementSelectat.getParinte();
+            Director parinteNou = (Director) destinatie;
+
+            parinteVechi.stergeElement(elementSelectat);
+            parinteNou.adaugaElement(elementSelectat);
+
+            refreshTreeView();
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Eroare la mutare");
+            alert.setHeaderText("Nu s-a putut muta elementul");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
+    }
+
+    private ElementSistem gasesteElementDupaCale(String cale) {
+        if(cale == null || cale.isEmpty()) {
+            return null;
+        }
+
+        Director parinteCurent = manager.getRadacina();
+
+        if(cale.equals("/")) {
+            return parinteCurent;
+        }
+
+        String[] parti = cale.split("/");
+
+        for(int i = 0; i < parti.length; i++) {
+            String numeParte = parti[i];
+            ElementSistem gasit = null;
+
+            for(ElementSistem copil : parinteCurent.getCopii()) {
+                if(copil.getNume().equals(numeParte)) {
+                    gasit = copil;
+                    break;
+                }
+            }
+
+            if(gasit == null) {
+                return null;
+            }
+
+            if(i < parti.length - 1) {
+                if(gasit instanceof Director) {
+                    parinteCurent = (Director) gasit;
+                } else {
+                    return null;
+                }
+            } else {
+                return gasit;
+            }
+        }
+
+        return null;
     }
 
     private void gestioneazaSelectie(TreeItem<ElementSistem> selectedItem) {

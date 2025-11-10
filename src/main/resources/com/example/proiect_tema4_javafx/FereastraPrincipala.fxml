@@ -15,5 +15,6 @@
       <Label fx:id="labelDimensiune" layoutX="385.0" layoutY="73.0" text="Dimensiune" />
       <Label layoutX="14.0" layoutY="246.0" text="Nume" />
       <Label layoutX="14.0" layoutY="285.0" text="Dimensiune" />
+      <Button fx:id="butonMuta" layoutX="256.0" layoutY="159.0" mnemonicParsing="false" onAction="#handleMuta" text="Muta element" />
    </children>
 </AnchorPane>
