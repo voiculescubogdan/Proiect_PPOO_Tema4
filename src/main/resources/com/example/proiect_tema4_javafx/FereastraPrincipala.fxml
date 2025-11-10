@@ -16,5 +16,7 @@
       <Label layoutX="14.0" layoutY="246.0" text="Nume" />
       <Label layoutX="14.0" layoutY="285.0" text="Dimensiune" />
       <Button fx:id="butonMuta" layoutX="256.0" layoutY="159.0" mnemonicParsing="false" onAction="#handleMuta" text="Muta element" />
+      <Label layoutX="17.0" layoutY="325.0" text="Tip Fisier" />
+      <ChoiceBox fx:id="choiceBoxTipFisier" layoutX="82.0" layoutY="321.0" prefWidth="150.0" />
    </children>
 </AnchorPane>

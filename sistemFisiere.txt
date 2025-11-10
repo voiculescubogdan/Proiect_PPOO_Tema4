@@ -1,8 +1,7 @@
+DIR:Images
+DIR:Downloads
 DIR:Videos
 DIR:Bogdan
   DIR:Stuff
-    FIS:examenPPOO,200.0
-DIR:Images
-  FIS:imagine1,2.0
-DIR:Downloads
-  FIS:winrar2,6.0
+    DIR:poze
+      FIS:eu.png,20.0

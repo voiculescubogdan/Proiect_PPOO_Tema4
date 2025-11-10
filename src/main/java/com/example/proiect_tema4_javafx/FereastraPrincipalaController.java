@@ -1,5 +1,6 @@
 package com.example.proiect_tema4_javafx;
 
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -15,6 +16,9 @@ public class FereastraPrincipalaController {
 
     @FXML
     private TextField textFieldDimensiune;
+
+    @FXML
+    private ChoiceBox<String> choiceBoxTipFisier;
 
     @FXML
     private Button butonAdaugaFisier;
@@ -42,6 +46,10 @@ public class FereastraPrincipalaController {
         treeView.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> gestioneazaSelectie(newValue)
         );
+
+        choiceBoxTipFisier.setItems(FXCollections.observableArrayList(".mp3", ".wav", ".jpg", ".png", ".jpeg", ".txt"));
+
+        choiceBoxTipFisier.setValue(".mp3");
     }
 
     public void setManager(ManagerMultimedia manager) {
@@ -89,10 +97,17 @@ public class FereastraPrincipalaController {
 
             Director parinteSelectat = (Director) elementSelectat;
 
-            String numeNou = textFieldNume.getText();
-            if(numeNou == null || numeNou.trim().isEmpty()) {
+            String numeBaza = textFieldNume.getText();
+            if(numeBaza == null || numeBaza.trim().isEmpty()) {
                 throw new Exception("Numele noului fisier nu poate fi gol!");
             }
+
+            String extensie = choiceBoxTipFisier.getValue();
+            if(extensie == null) {
+                throw new Exception("Tipul fisierului nu este selectat!");
+            }
+
+            String numeComplet = numeBaza.trim() + extensie;
 
             String dimensiuneText = textFieldDimensiune.getText();
             if(dimensiuneText == null || dimensiuneText.trim().isEmpty()) {
@@ -110,7 +125,7 @@ public class FereastraPrincipalaController {
                 throw new Exception("Dimensiunea trebuie sa fie un numar pozitiv!");
             }
 
-            Fisier fisierNou = new Fisier(numeNou.trim(), dimensiune);
+            Fisier fisierNou = new Fisier(numeComplet, dimensiune);
             parinteSelectat.adaugaElement(fisierNou);
 
             refreshTreeView();
