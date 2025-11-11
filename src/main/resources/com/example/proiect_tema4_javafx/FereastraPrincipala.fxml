@@ -7,10 +7,10 @@
    <children>
       <TreeView fx:id="treeView" layoutX="10.0" layoutY="27.0" prefHeight="200.0" prefWidth="221.0" />
       <Button fx:id="butonAdaugaDirector" layoutX="256.0" layoutY="26.0" mnemonicParsing="false" onAction="#handleAdaugaDirector" text="Adauga Director" />
-      <Button fx:id="butonAdaugaFisier" layoutX="256.0" layoutY="69.0" mnemonicParsing="false" onAction="#handleAdaugaFisier" text="Adauga Fisier" />
-      <Button fx:id="butonSterge" layoutX="256.0" layoutY="114.0" mnemonicParsing="false" onAction="#handleSterge" text="Sterge element" />
-      <Label fx:id="labelCale" layoutX="385.0" layoutY="30.0" text="Cale" />
-      <Label fx:id="labelDimensiune" layoutX="385.0" layoutY="73.0" text="Dimensiune" />
-      <Button fx:id="butonMuta" layoutX="256.0" layoutY="159.0" mnemonicParsing="false" onAction="#handleMuta" text="Muta element" />
+      <Button fx:id="butonAdaugaFisier" layoutX="256.0" layoutY="69.0" mnemonicParsing="false" onAction="#handleAdaugaFisier" prefHeight="25.0" prefWidth="103.0" text="Adauga Fisier" />
+      <Button fx:id="butonSterge" layoutX="256.0" layoutY="114.0" mnemonicParsing="false" onAction="#handleSterge" prefHeight="25.0" prefWidth="103.0" text="Sterge element" />
+      <Label fx:id="labelCale" layoutX="14.0" layoutY="237.0" text="Cale: " />
+      <Label fx:id="labelDimensiune" layoutX="14.0" layoutY="263.0" text="Dimensiune (KB): " />
+      <Button fx:id="butonMuta" layoutX="256.0" layoutY="159.0" mnemonicParsing="false" onAction="#handleMuta" prefHeight="25.0" prefWidth="103.0" text="Muta element" />
    </children>
 </AnchorPane>
