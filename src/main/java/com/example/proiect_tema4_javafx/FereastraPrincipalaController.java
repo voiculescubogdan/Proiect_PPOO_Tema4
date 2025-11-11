@@ -25,6 +25,9 @@ public class FereastraPrincipalaController {
     private Button butonMuta;
 
     @FXML
+    private Button butonRedenumeste;
+
+    @FXML
     private Label labelCale;
 
     @FXML
@@ -276,6 +279,65 @@ public class FereastraPrincipalaController {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Eroare la mutare");
             alert.setHeaderText("Nu s-a putut muta elementul");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
+    }
+
+    @FXML
+    private void handleRedenumeste() {
+        try {
+
+            if(elementSelectat == null) {
+                throw new Exception("Nu ai selectat niciun element de redenumit!");
+            }
+
+            if(elementSelectat.getParinte() == null) {
+                throw new Exception("Nu poti redenumi directorul radacina!");
+            }
+
+            Director parinte = elementSelectat.getParinte();
+            String numeNouComplet;
+            String numeInitialPentruDialog = elementSelectat.getNume();
+            String extensie = "";
+
+            if(elementSelectat instanceof Fisier) {
+                String numeCurent = elementSelectat.getNume();
+                int indexPunct = numeCurent.lastIndexOf('.');
+
+                if(indexPunct > 0 && indexPunct < numeCurent.length() - 1) {
+                    numeInitialPentruDialog = numeCurent.substring(0, indexPunct);
+                    extensie = numeCurent.substring(indexPunct);
+                }
+            }
+
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Redenumire Element: ");
+            dialog.setHeaderText("Redenumesti: " + elementSelectat.getCale());
+            dialog.setContentText("Introduce noul nume: ");
+
+            dialog.getEditor().setText(numeInitialPentruDialog);
+
+            Optional<String> rezultat = dialog.showAndWait();
+
+            if(rezultat.isPresent() && !rezultat.get().trim().isEmpty()) {
+                String numeNouBaza = rezultat.get().trim();
+                numeNouComplet = numeNouBaza + extensie;
+
+                if(parinte.areCopilCuNumele(numeNouComplet)) {
+                    throw new Exception("Un element cu numele: " + numeNouComplet + " exista deja!");
+                }
+
+                elementSelectat.setNume(numeNouComplet);
+
+                refreshTreeView();
+
+                gestioneazaSelectie(null);
+            }
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Eroare la redenumire");
+            alert.setHeaderText("Nu s-a putut redenumi elementul");
             alert.setContentText(e.getMessage());
             alert.showAndWait();
         }

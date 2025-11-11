@@ -1,5 +1,5 @@
 DIR:Images
-  FIS:imagine1.mp3,4.0
+  FIS:imagine13.jpg,4.0
 DIR:Downloads
 DIR:Videos
   FIS:video.mp3,5.0
