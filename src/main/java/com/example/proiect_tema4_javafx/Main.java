@@ -24,7 +24,7 @@ public class Main extends Application {
         controller.setManager(manager);
 
         stage.setTitle("Manager Multimedia");
-        stage.setScene(new Scene(root, 800, 600));
+        stage.setScene(new Scene(root, 650, 400));
         stage.show();
 
         stage.setOnCloseRequest(event -> {

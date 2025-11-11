@@ -3,6 +3,7 @@ package com.example.proiect_tema4_javafx;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 
 import java.util.Optional;
 
@@ -10,15 +11,6 @@ public class FereastraPrincipalaController {
 
     @FXML
     private TreeView<ElementSistem> treeView;
-
-    @FXML
-    private TextField textFieldNume;
-
-    @FXML
-    private TextField textFieldDimensiune;
-
-    @FXML
-    private ChoiceBox<String> choiceBoxTipFisier;
 
     @FXML
     private Button butonAdaugaFisier;
@@ -46,10 +38,6 @@ public class FereastraPrincipalaController {
         treeView.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> gestioneazaSelectie(newValue)
         );
-
-        choiceBoxTipFisier.setItems(FXCollections.observableArrayList(".mp3", ".wav", ".jpg", ".png", ".jpeg", ".txt"));
-
-        choiceBoxTipFisier.setValue(".mp3");
     }
 
     public void setManager(ManagerMultimedia manager) {
@@ -97,42 +85,72 @@ public class FereastraPrincipalaController {
 
             Director parinteSelectat = (Director) elementSelectat;
 
-            String numeBaza = textFieldNume.getText();
-            if(numeBaza == null || numeBaza.trim().isEmpty()) {
-                throw new Exception("Numele noului fisier nu poate fi gol!");
+            Dialog<RezultatDialogFisier> dialog = new Dialog<>();
+            dialog.setTitle("Adauga Fisier Nou: ");
+            dialog.setHeaderText("Adaugare in: " + parinteSelectat.getCale());
+
+            ButtonType butonAdauga = new ButtonType("Adauga", ButtonBar.ButtonData.OK_DONE);
+            dialog.getDialogPane().getButtonTypes().addAll(butonAdauga, ButtonType.CANCEL);
+
+            GridPane grid = new GridPane();
+            grid.setHgap(10);
+            grid.setVgap(10);
+
+            TextField fieldNume = new TextField();
+            fieldNume.setPromptText("Nume");
+            TextField fieldDimensiune = new TextField();
+            fieldDimensiune.setPromptText("Dimensiune (KB)");
+            ChoiceBox<String> comboTip = new ChoiceBox<>(
+                    FXCollections.observableArrayList(".mp3", ".wav", ".jpg", ".png")
+            );
+            comboTip.setValue(".mp3");
+
+            grid.add(new Label("Nume: "), 0, 0);
+            grid.add(fieldNume, 1, 0);
+            grid.add(comboTip, 2, 0);
+            grid.add(new Label("Dimensiune: "), 0, 1);
+            grid.add(fieldDimensiune, 1, 1);
+
+            dialog.getDialogPane().setContent(grid);
+
+            dialog.setResultConverter(tipButon -> {
+                if(tipButon == butonAdauga) {
+                    try {
+                        String nume = fieldNume.getText().trim() + comboTip.getValue();
+                        double dim = Double.parseDouble(fieldDimensiune.getText());
+
+                        if(nume.trim().isEmpty() || comboTip.getValue() == null) {
+                            return null;
+                        }
+
+                        return new RezultatDialogFisier(nume, dim);
+                    } catch (NumberFormatException e) {
+                        return null;
+                    }
+                }
+                return null;
+            });
+
+            Optional<RezultatDialogFisier> rezultat = dialog.showAndWait();
+
+            if(rezultat.isPresent() && rezultat.get() != null) {
+                RezultatDialogFisier dateFisier = rezultat.get();
+
+                if(parinteSelectat.areCopilCuNumele(dateFisier.getNume())) {
+                    throw new Exception("Un element cu numele: " + dateFisier.getNume() + " exista deja!");
+                }
+
+                if(dateFisier.getDimensiune() <= 0) {
+                    throw new Exception("Dimensiunea trebuie sa fie pozitiva!");
+                }
+
+                Fisier fisierNou = new Fisier(dateFisier.getNume(), dateFisier.getDimensiune());
+                parinteSelectat.adaugaElement(fisierNou);
+
+                refreshTreeView();
+            } else if (rezultat.isPresent()) {
+                throw new Exception("Date invalide! Numele nu poate fi gol si dimensiunea trebuie sa fie un numar!");
             }
-
-            String extensie = choiceBoxTipFisier.getValue();
-            if(extensie == null) {
-                throw new Exception("Tipul fisierului nu este selectat!");
-            }
-
-            String numeComplet = numeBaza.trim() + extensie;
-
-            String dimensiuneText = textFieldDimensiune.getText();
-            if(dimensiuneText == null || dimensiuneText.trim().isEmpty()) {
-                throw new Exception("Dimensiunea fisierului nu poate fi goala!");
-            }
-
-            double dimensiune;
-            try {
-                dimensiune = Double.parseDouble(dimensiuneText);
-            } catch (NumberFormatException e) {
-                throw new NumberFormatException("Dimensiunea trebuie sa fie un numar valid!");
-            }
-
-            if(dimensiune <= 0) {
-                throw new Exception("Dimensiunea trebuie sa fie un numar pozitiv!");
-            }
-
-            Fisier fisierNou = new Fisier(numeComplet, dimensiune);
-            parinteSelectat.adaugaElement(fisierNou);
-
-            refreshTreeView();
-
-            textFieldNume.clear();
-            textFieldDimensiune.clear();
-
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Eroare la adaugare");
@@ -155,19 +173,25 @@ public class FereastraPrincipalaController {
 
             Director parinteSelectat = (Director) elementSelectat;
 
-            String numeNou = textFieldNume.getText();
-            if(numeNou == null || numeNou.trim().isEmpty()) {
-                throw new Exception("Numele noului director nu poate fi gol!");
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Adauga director nou");
+            dialog.setHeaderText("Adaugare in: " + parinteSelectat.getCale());
+            dialog.setContentText("Numele directorului: ");
+
+            Optional<String> rezultat = dialog.showAndWait();
+
+            if(rezultat.isPresent() && !rezultat.get().trim().isEmpty()) {
+                String numeNou = rezultat.get().trim();
+
+                if(parinteSelectat.areCopilCuNumele(numeNou)) {
+                    throw new Exception("Un element cu numele: " + numeNou + " exista deja!");
+                }
+
+                Director directorNou = new Director(numeNou);
+                parinteSelectat.adaugaElement(directorNou);
+
+                refreshTreeView();
             }
-
-            Director directorNou = new Director(numeNou.trim());
-            parinteSelectat.adaugaElement(directorNou);
-
-            refreshTreeView();
-
-            textFieldNume.clear();
-            textFieldDimensiune.clear();
-
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Eroare la adaugare");

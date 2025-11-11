@@ -50,4 +50,13 @@ public class Director extends ElementSistem{
         element.setParinte(null);
     }
 
+    public boolean areCopilCuNumele(String nume) {
+        for(ElementSistem copil : this.copii) {
+            if(copil.getNume().equalsIgnoreCase(nume)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
