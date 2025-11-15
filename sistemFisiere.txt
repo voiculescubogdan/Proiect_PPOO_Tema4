@@ -1,9 +1,10 @@
 DIR:Images
+  FIS:imagine1.jpg,5.0
 DIR:Downloads
-  FIS:imagine1.mp3,4.0
 DIR:Videos
   FIS:video.mp3,5.0
 DIR:Bogdan
   DIR:Stuff
     DIR:poze
       FIS:eu.mp3,20.0
+  DIR:Documents
