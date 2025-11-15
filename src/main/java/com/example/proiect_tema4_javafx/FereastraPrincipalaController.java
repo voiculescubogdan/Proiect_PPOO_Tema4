@@ -7,6 +7,10 @@ import javafx.scene.layout.GridPane;
 
 import java.util.Optional;
 
+/**
+ * Controller-ul JavaFX pentru fereastra principala
+ * Gestioneaza interactiunile utilizatorului si comunica cu ManagerMultimedia
+ * */
 public class FereastraPrincipalaController {
 
     @FXML
@@ -33,6 +37,10 @@ public class FereastraPrincipalaController {
     private ManagerMultimedia manager;
     private ElementSistem elementSelectat;
 
+    /**
+     * Metoda speciala apelata de JavaFX dupa ce componentele FXML au fost injectate
+     * Aici setam un listener pentru TreeView
+     * */
     @FXML
     public void initialize() {
         treeView.getSelectionModel().selectedItemProperty().addListener(
@@ -40,11 +48,20 @@ public class FereastraPrincipalaController {
         );
     }
 
+    /**
+     * Metoda apelata din Main pentru a injecta logica in controller
+     * Populeaza arborele vizual
+     * @param manager Instanta ManagerMultimedia
+     * */
     public void setManager(ManagerMultimedia manager) {
         this.manager = manager;
         refreshTreeView();
     }
 
+    /**
+     * Goleste si repopuleaza intregul TreeView pe baza datelor curente din manager
+     * Aceasta metoda este apelata dupa fiecare operatie
+     * */
     public void refreshTreeView() {
         Director radacinaDate = manager.getRadacina();
 
@@ -57,6 +74,11 @@ public class FereastraPrincipalaController {
         treeView.setRoot(radacinaVizuala);
     }
 
+    /**
+     * Metoda ajutatoare recursiva pentru a construi arborele de TreeItem-uri vizuale pe baza arborelui de date
+     * @param parinteDate Nodul de date (Director), procesam copiii
+     * @param parinteVizual Nodul vizual (TreeItem) la care adaugam noii copii
+     * */
     private void buildTreeRecursiv(Director parinteDate, TreeItem<ElementSistem> parinteVizual) {
 
         for(ElementSistem copilDate : parinteDate.getCopii()) {
@@ -72,6 +94,11 @@ public class FereastraPrincipalaController {
         }
     }
 
+    /**
+     * Apelat cand utilizatorul apasa butonul "Adauga Fisier"
+     * Afiseaza un dialog customizat pentru a cere nume, tip si dimensiune
+     * Valideaza datele si adauga un nou Fisier
+     * */
     @FXML
     private void handleAdaugaFisier() {
         try {
@@ -137,7 +164,7 @@ public class FereastraPrincipalaController {
                 RezultatDialogFisier dateFisier = rezultat.get();
 
                 if(parinteSelectat.areCopilCuNumele(dateFisier.getNume())) {
-                    throw new Exception("Un element cu numele: " + dateFisier.getNume() + " exista deja!");
+                    throw new ExceptieElementDuplicat("Un element cu numele: " + dateFisier.getNume() + " exista deja!");
                 }
 
                 if(dateFisier.getDimensiune() <= 0) {
@@ -160,6 +187,10 @@ public class FereastraPrincipalaController {
         }
     }
 
+    /**
+     * Apelat cand utilizatorul apasa butonul "Adauga Director"
+     * Valideaza selectia, cere un nume nou printr-un dialog si adauga un nou Director
+     * */
     @FXML
     private void handleAdaugaDirector() {
         try {
@@ -184,7 +215,7 @@ public class FereastraPrincipalaController {
                 String numeNou = rezultat.get().trim();
 
                 if(parinteSelectat.areCopilCuNumele(numeNou)) {
-                    throw new Exception("Un element cu numele: " + numeNou + " exista deja!");
+                    throw new ExceptieElementDuplicat("Un element cu numele: " + numeNou + " exista deja!");
                 }
 
                 Director directorNou = new Director(numeNou);
@@ -201,6 +232,10 @@ public class FereastraPrincipalaController {
         }
     }
 
+    /**
+     * Apelat cand utilizatorul apasa butonul "Sterge"
+     * Valideaza selectia si sterge elementul selectat
+     * */
     @FXML
     private void handleSterge() {
         try {
@@ -227,6 +262,10 @@ public class FereastraPrincipalaController {
         }
     }
 
+    /**
+     * Apelat cand utilizatorul apasa butonul "Muta element"
+     * Cere o cale de destinatie, valideaza si muta elementul in noul parinte
+     * */
     @FXML
     private void handleMuta() {
         try {
@@ -281,6 +320,11 @@ public class FereastraPrincipalaController {
         }
     }
 
+    /**
+     * Metoda ajutatoare care cauta un ElementSistem in arbore pe baza caii sale complete
+     * @param cale Calea de cautat
+     * @return ElementSistem gasit, sau null daca nu exista
+     * */
     private ElementSistem gasesteElementDupaCale(String cale) {
         if(cale == null || cale.isEmpty()) {
             return null;
@@ -323,6 +367,11 @@ public class FereastraPrincipalaController {
         return null;
     }
 
+    /**
+     * Apelat de fiecare data cand utilizatorul selecteaza un alt element in TreeView
+     * Actualizeaza label-urile de informatii (cale si dimensiune)
+     * @param selectedItem Noul TreeItem selectat
+     * */
     private void gestioneazaSelectie(TreeItem<ElementSistem> selectedItem) {
         if(selectedItem != null) {
             this.elementSelectat = selectedItem.getValue();

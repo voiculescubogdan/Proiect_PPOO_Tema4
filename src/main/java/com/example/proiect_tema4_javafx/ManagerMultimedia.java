@@ -3,6 +3,11 @@ package com.example.proiect_tema4_javafx;
 import java.io.*;
 import java.util.Stack;
 
+/**
+ * Clasa principala care gestioneaza logica aplicatiei
+ * Detine radacina sistemului de fisiere simulat
+ * Gestioneaza salvarea si incarcarea din fisier text
+ * */
 public class ManagerMultimedia {
 
     private Director radacina;
@@ -19,6 +24,11 @@ public class ManagerMultimedia {
         return radacina;
     }
 
+    /**
+     * Metoda publica pentru incarcare
+     * Deschide fisierul text si reconstruieste arborele de obiecte
+     * Folosim Stack pentru a gestiona ierarhia
+     * */
     public void incarcaSistem() {
         System.out.println("Se incarca sistemul de fisiere..." + fisiereSalvare);
 
@@ -68,6 +78,11 @@ public class ManagerMultimedia {
         }
     }
 
+    /**
+     * Metoda ajutatoare privata pentru a calcula nivelul de indentare pe baza spatiilor de la inceput
+     * @param linie Linia de text
+     * @return nivel (0 - radacina, 1 - copil ..)
+     * */
     private int calculeazaNivelIndentare(String linie) {
         int numarSpatii = 0;
 
@@ -78,6 +93,10 @@ public class ManagerMultimedia {
         return numarSpatii / 2;
     }
 
+    /**
+     * Metoda publica pentru salvare
+     * Deschide fisierul si porneste procesul recursiv de scriere
+     * */
     public void salveazaSistem() {
         System.out.println("Se salveaza sistemul de fisiere..." + fisiereSalvare);
 
@@ -93,13 +112,21 @@ public class ManagerMultimedia {
         }
     }
 
+    /**
+     * Metoda ajutatoare recursiva
+     * Scrie elementul curent si daca e director isi apeleaza copiii si creste indentarea
+     * @param element Elementul curent (Fisier sau Director)
+     * @param bw Writer-ul deja deschis
+     * @param indentare String-ul de indentare
+     * @throws IOException Daca apare o eroare la scrierea in fisier
+     * */
     private void salveazaElementRecursiv(ElementSistem element, BufferedWriter bw, String indentare) throws IOException {
         bw.write(indentare);
 
         if(element instanceof Fisier) {
             Fisier fisier = (Fisier) element;
 
-            bw.write("FIS:" + fisier.getNume() + "," + fisier.getDimensiuneKB());
+            bw.write("FIS:" + fisier.getNume() + "," + fisier.getDimensiune());
             bw.newLine();
         } else if(element instanceof Director) {
             Director director = (Director) element;

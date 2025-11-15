@@ -1,6 +1,6 @@
 DIR:Images
-  FIS:imagine1.mp3,4.0
 DIR:Downloads
+  FIS:imagine1.mp3,4.0
 DIR:Videos
   FIS:video.mp3,5.0
 DIR:Bogdan

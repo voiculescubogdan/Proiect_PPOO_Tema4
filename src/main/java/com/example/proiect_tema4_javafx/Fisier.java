@@ -1,5 +1,10 @@
 package com.example.proiect_tema4_javafx;
 
+/**
+ * Un fisier individual in sistemul simulat
+ * Aceasta clasa extinde ElementSistem
+ * Implementeaza metode abstracte pentru calcularea dimensiunii si a caii
+ * */
 public class Fisier extends ElementSistem{
 
     private double dimensiuneKB;
@@ -7,10 +12,6 @@ public class Fisier extends ElementSistem{
     public Fisier(String nume, double dimensiuneKB) {
         super(nume);
         this.dimensiuneKB = dimensiuneKB;
-    }
-
-    public double getDimensiuneKB() {
-        return dimensiuneKB;
     }
 
     @Override

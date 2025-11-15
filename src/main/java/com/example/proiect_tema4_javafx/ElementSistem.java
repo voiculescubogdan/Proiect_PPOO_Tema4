@@ -1,5 +1,9 @@
 package com.example.proiect_tema4_javafx;
 
+/**
+ * Clasa abstracta de baza care reprezinta un element generic intr-un sistem de gestionare a fisierelor
+ * Va fi folosita pentru clasele Fisier si Director
+ */
 public abstract class ElementSistem {
     protected String nume;
     protected Director parinte;
